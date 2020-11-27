@@ -19,10 +19,10 @@ public class Bogeman : PhysicsGame
     private PhysicsObject vaihtoehto1;
     private PhysicsObject vaihtoehto2;
     private readonly string[] viholliset = new string[] { "vihu1", "pikatsu", "iseake", "fransis", "powser", "pmaski", "pekka", "srekki" };
-    private Vector omapaikka = new Vector(-300, -100);
-    private Vector vihupaikka = new Vector(300, 200);
+    private Vector omaPaikka = new Vector(-300, -100);
+    private Vector vihuPaikka = new Vector(300, 200);
     private double valiaikainenkerroin = 0;
-    private double dmgkerroin = 100;
+    private double dmgkerroin = 30;
     private int nopeuskerroin = 1;
     private double kokokerroin = 1;
     private double raivokerroin = 1;
@@ -35,9 +35,9 @@ public class Bogeman : PhysicsGame
     private Painike kolme;
     private Painike nelja;
     private Painike yksi;
-    private DoubleMeter omaelama;
-    private DoubleMeter vihuelama;
-    private Viholainen pelipasi;
+    private DoubleMeter omaElama;
+    private DoubleMeter vihuElama;
+    private Viholainen peliPasi;
     private Pelaaja kimmo;
     private readonly SoundEffect criticalhit = LoadSoundEffect("CriticalHitSmash");
     private readonly SoundEffect oof = LoadSoundEffect("oofsound");
@@ -50,8 +50,8 @@ public class Bogeman : PhysicsGame
     /// käynnistää musiikin
     /// </summary>
     public override void Begin()
-    {    
-       /// MediaPlayer.Play("Taustamusa");
+    {
+        /// MediaPlayer.Play("Taustamusa");
         Aloita();
         Musanappaimet();
     }
@@ -68,19 +68,19 @@ public class Bogeman : PhysicsGame
 
         Mouse.IsCursorVisible = true;
 
-        Add(new Viesti("Tervetuloa pelaamaan Bogemäniä!", new Vector(325, 50), 500, 30,1));
+        Add(new Viesti("Tervetuloa pelaamaan Bogemäniä!", new Vector(325, 50), 500, 30, 1));
 
         Level.Background.CreateGradient(Color.Black, Color.DarkAzure);
 
-        Painike aloita = new Painike(this, 300, "Pelaa Peliä",  new Vector(0, 200));
+        Painike aloita = new Painike(this, 300, "Pelaa Peliä", new Vector(0, 200));
         Add(aloita);
         aloita.Clicked += HahmoValinta;
 
-        Painike ohjeet = new Painike(this,200, "Ohjeet",  new Vector(0, -20));
+        Painike ohjeet = new Painike(this, 200, "Ohjeet", new Vector(0, -20));
         Add(ohjeet);
         ohjeet.Clicked += Ohjeet;
 
-        Painike poistu = new Painike(this, 100, "Exit",  new Vector(0, -200));
+        Painike poistu = new Painike(this, 100, "Exit", new Vector(0, -200));
         Add(poistu);
         poistu.Clicked += Exit;
 
@@ -96,15 +96,15 @@ public class Bogeman : PhysicsGame
         Musanappaimet();
         Level.Background.CreateGradient(Color.Black, Color.DarkAzure);
 
-        Painike takaisin = new Painike(this, 100, "Takasi",  new Vector(-380, 320));
+        Painike takaisin = new Painike(this, 100, "Takasi", new Vector(-380, 320));
 
-        Viesti ohjeita = new Viesti("Paina nappuloita valitaksesi tapahtuman", new Vector(150,150),500,30,1);
+        Viesti ohjeita = new Viesti("Paina nappuloita valitaksesi tapahtuman", new Vector(150, 150), 500, 30, 1);
         Add(ohjeita);
-        Add(new Viesti("Sinulla on ensin vuoro, sitten on vastustajan vuoro", new Vector(150, 250), 500, 30,1));
-        Add(new Viesti("Vuorottelu jatkuu kunnes jompikumpi kuolee", new Vector(150, 350), 500, 30,1));
-        Add(new Viesti("Voitat pelin tappamalla kaikki kohtaamasi viholliset", new Vector(150, 450), 500, 30,1));
-        Add(new Viesti("Musiikin saa pois P-näppäimellä", new Vector(150, 650), 500, 30,1));
-        Add(new Viesti("Musiikin saa takaisin O-näppäimellä", new Vector(150, 700), 500, 30,1));
+        Add(new Viesti("Sinulla on ensin vuoro, sitten on vastustajan vuoro", new Vector(150, 250), 500, 30, 1));
+        Add(new Viesti("Vuorottelu jatkuu kunnes jompikumpi kuolee", new Vector(150, 350), 500, 30, 1));
+        Add(new Viesti("Voitat pelin tappamalla kaikki kohtaamasi viholliset", new Vector(150, 450), 500, 30, 1));
+        Add(new Viesti("Musiikin saa pois P-näppäimellä", new Vector(150, 650), 500, 30, 1));
+        Add(new Viesti("Musiikin saa takaisin O-näppäimellä", new Vector(150, 700), 500, 30, 1));
         Add(takaisin);
         takaisin.Clicked += Aloita;
     }
@@ -115,7 +115,7 @@ public class Bogeman : PhysicsGame
     /// </summary>
     private void HahmoValinta()
     {
-        Image[] jartsananimaatio1 = LoadImages("jartsanani.png", "jartsan.png") ;
+        Image[] jartsananimaatio1 = LoadImages("jartsanani.png", "jartsan.png");
         Image[] jartsananimaatio2 = LoadImages("valikko1", "valikko1ani.png");
         Image[] jartsananimaatio3 = LoadImages("valikko2", "valikko2ani.png");
 
@@ -128,7 +128,7 @@ public class Bogeman : PhysicsGame
         jartsa1.Position = new Vector(0, 0);
         Add(jartsa1);
 
-        if (poissa1<1)
+        if (poissa1 < 1)
         {
             vaihtoehto1 = new PhysicsObject(300, 300);
             vaihtoehto1.Image = Game.LoadImage("valikko1.png");
@@ -152,25 +152,25 @@ public class Bogeman : PhysicsGame
         jartsa1.Animation = new Animation(jartsananimaatio1);
         jartsa1.Animation.FPS = 10;
 
-        Viesti valitse = new Viesti("Valitse Hahmosi", new Vector(425, 100), 500, 30,1);
+        Viesti valitse = new Viesti("Valitse Hahmosi", new Vector(425, 100), 500, 30, 1);
         Add(valitse);
 
-        if (poissa1<1)
-        { 
-        pasi = new Painike(this, 150,"Pasi", new Vector(-300, -200));
-        Add(pasi);
+        if (poissa1 < 1)
+        {
+            pasi = new Painike(this, 150, "Pasi", new Vector(-300, -200));
+            Add(pasi);
         }
 
         if (poissa2 < 1)
         {
-            pena = new Painike(this, 150,"Pena",  new Vector(300, -200));
+            pena = new Painike(this, 150, "Pena", new Vector(300, -200));
             Add(pena);
         }
 
-        jartsa = new Painike(this, 150,"Jartsa",  new Vector(0, -200));
+        jartsa = new Painike(this, 150, "Jartsa", new Vector(0, -200));
         Add(jartsa);
 
-        Painike takaisin = new Painike(this,100,"Takasi", new Vector (-380,320));
+        Painike takaisin = new Painike(this, 100, "Takasi", new Vector(-380, 320));
         Add(takaisin);
         takaisin.Clicked += Aloita;
 
@@ -192,7 +192,7 @@ public class Bogeman : PhysicsGame
     /// </summary>
     private void PenaClicked()
     {
-        Add(new Viesti("Et ole ostanut hahmoa!", new Vector(675, 300), 5, 30,1));
+        Add(new Viesti("Et ole ostanut hahmoa!", new Vector(675, 300), 5, 30, 1));
         pena.Destroy();
         vaihtoehto2.Destroy();
         poissa2++;
@@ -204,7 +204,7 @@ public class Bogeman : PhysicsGame
     /// </summary>
     private void PasiClicked()
     {
-        Add(new Viesti("Et ole ostanut hahmoa!", new Vector(100, 300), 5, 30,1));
+        Add(new Viesti("Et ole ostanut hahmoa!", new Vector(100, 300), 5, 30, 1));
         pasi.Destroy();
         vaihtoehto1.Destroy();
         poissa1++;
@@ -219,13 +219,13 @@ public class Bogeman : PhysicsGame
         ClearAll();
         Level.Background.CreateGradient(Color.Black, Color.DarkAzure);
 
-        Viesti oletkovarma = new Viesti("Oletko Aivan Varma?", new Vector(400,200), 500, 30,1);
+        Viesti oletkovarma = new Viesti("Oletko Aivan Varma?", new Vector(400, 200), 500, 30, 1);
         Add(oletkovarma);
 
-        Painike kylla = new Painike(this,200,"kyllä", new Vector(-200, 0));
+        Painike kylla = new Painike(this, 200, "kyllä", new Vector(-200, 0));
         Add(kylla);
 
-        Painike ei = new Painike(this,200,"En ole", new Vector(200, 0));
+        Painike ei = new Painike(this, 200, "En ole", new Vector(200, 0));
         Add(ei);
         Mouse.ListenOn(ei, MouseButton.Left, ButtonState.Pressed, HahmoValinta, null);
         kylla.Clicked += KyllaClicked;
@@ -245,7 +245,7 @@ public class Bogeman : PhysicsGame
         ClearAll();
         Begining();
     }
-   
+
 
     /// <summary>
     /// musiikki paussille tai eteenpäin
@@ -255,13 +255,13 @@ public class Bogeman : PhysicsGame
         pause += 1;
         if (pause % 2 == 0)
         {
-         MediaPlayer.Resume();
+            MediaPlayer.Resume();
         }
         else
         {
-         MediaPlayer.Pause();
+            MediaPlayer.Pause();
         }
-        
+
     }
 
 
@@ -270,7 +270,7 @@ public class Bogeman : PhysicsGame
     /// </summary>
     private void NextSong()
     {
-        string[] musiikit = new string[] { "Taustamusa", "drumandbass","trap"};
+        string[] musiikit = new string[] { "Taustamusa", "drumandbass", "trap" };
 
         biisi += 1;
 
@@ -280,7 +280,7 @@ public class Bogeman : PhysicsGame
         }
         MediaPlayer.Play(musiikit[biisi]);
 
-      
+
     }
 
 
@@ -304,19 +304,19 @@ public class Bogeman : PhysicsGame
         LuoKentta();
 
         kimmo = new Pelaaja(this, 200, 10, "jartsan.png"); Add(kimmo);
-        pelipasi = new Viholainen(this, 100, 10, "kimbo.png"); Add(pelipasi);
+        peliPasi = new Viholainen(this, 100, 10, "kimbo.png"); Add(peliPasi);
 
-        kimmo.MoveTo(omapaikka, 500);
-        pelipasi.MoveTo(vihupaikka, 500);
+        kimmo.MoveTo(omaPaikka, 500);
+        peliPasi.MoveTo(vihuPaikka, 500);
     }
 
 
     /// <summary>
     /// Tasonumeron indikaattori
     /// </summary>
-    private void Tasonumero()
+    private void TasoNumero()
     {
-        Add(new Viesti("Taso" + " " + $"{vastustajanro + 2}", new Vector(100, 100), 800, 30,0));
+        Add(new Viesti("Taso" + " " + $"{vastustajanro + 2}", new Vector(100, 100), 800, 30, 0));
         Level.CreateBorders(false);
     }
 
@@ -327,8 +327,8 @@ public class Bogeman : PhysicsGame
     private void LuoKentta()
     {
         Level.Size = new Vector(2000 + kokokerroin, 2000 + kokokerroin);
-        Timer.SingleShot(2, Tasonumero);
-        Camera.ZoomToLevel(-800+kokokerroin);
+        Timer.SingleShot(2, TasoNumero);
+        Camera.ZoomToLevel(-800 + kokokerroin);
         LuoElamat();
         Mouse.IsCursorVisible = true;
         Gravity = new Vector(0, 0);
@@ -341,16 +341,16 @@ public class Bogeman : PhysicsGame
     /// </summary>
     private void LuoPainikkeet()
     {
-        if (omaelama>0)
-        { 
-        yksi = new Painike(this, 120, "Lyönti", new Vector(200, -150)); Add(yksi);
-        kaksi = new Painike(this, 120, "Heitä kivi", new Vector(350, -150)); Add(kaksi);
-        kolme = new Painike(this, 120, "Raivo", new Vector(200, -300)); Add(kolme);
-        nelja = new Painike(this, 120, "Potku", new Vector(350, -300)); Add(nelja);
-        yksi.Clicked += Lyonti;
-        kaksi.Clicked += Kivi;
-        kolme.Clicked += Raivo;
-        nelja.Clicked += Potku;
+        if (omaElama > 0)
+        {
+            yksi = new Painike(this, 120, "Lyönti", new Vector(200, -150)); Add(yksi);
+            kaksi = new Painike(this, 120, "Heitä kivi", new Vector(350, -150)); Add(kaksi);
+            kolme = new Painike(this, 120, "Raivo", new Vector(200, -300)); Add(kolme);
+            nelja = new Painike(this, 120, "Potku", new Vector(350, -300)); Add(nelja);
+            yksi.Clicked += Lyonti;
+            kaksi.Clicked += Kivi;
+            kolme.Clicked += Raivo;
+            nelja.Clicked += Potku;
         }
     }
 
@@ -360,42 +360,42 @@ public class Bogeman : PhysicsGame
     /// </summary>
     private void LuoElamat()
     {
-        vihuelama = new DoubleMeter(100 + vihuHP);
-        vihuelama.MaxValue = 100 + vihuHP;
-        vihuelama.MinValue = 0;
+        vihuElama = new DoubleMeter(100 + vihuHP);
+        vihuElama.MaxValue = 100 + vihuHP;
+        vihuElama.MinValue = 0;
         BarGauge paari1 = new BarGauge(20, 250);
-        Label vihupistenaytto = new Label();
-        vihupistenaytto.Position = new Vector(300, 375);
-        Label omapistenaytto = new Label();
-        omapistenaytto.Position = new Vector(-200, -320);
-        
+        Label vihuPisteNaytto = new Label();
+        vihuPisteNaytto.Position = new Vector(300, 375);
+        Label omaPisteNaytto = new Label();
+        omaPisteNaytto.Position = new Vector(-200, -320);
+
 
         paari1.X = 300;
         paari1.Y = 350;
         paari1.Angle = Angle.FromDegrees(90);
         paari1.Color = Color.Red;
         paari1.BarColor = Color.Green;
-        paari1.BindTo(vihuelama);
-        Add(vihupistenaytto);
-        vihupistenaytto.BindTo(vihuelama);
+        paari1.BindTo(vihuElama);
+        Add(vihuPisteNaytto);
+        vihuPisteNaytto.BindTo(vihuElama);
         Add(paari1);
 
-        vihuelama.LowerLimit += delegate { VihuTuhoutuminen(); }; ;
-        omaelama = new DoubleMeter(100 + kokokerroin);
-        omaelama.MaxValue = 100 + kokokerroin;
-        omaelama.MinValue = 0;
+        vihuElama.LowerLimit += delegate { VihuTuhoutuminen(); }; ;
+        omaElama = new DoubleMeter(100 + kokokerroin);
+        omaElama.MaxValue = 100 + kokokerroin;
+        omaElama.MinValue = 0;
         BarGauge paari2 = new BarGauge(20, 250);
         paari2.X = -200;
         paari2.Y = -340;
         paari2.Angle = Angle.FromDegrees(-90);
         paari2.Color = Color.Red;
         paari2.BarColor = Color.Green;
-        paari2.BindTo(omaelama);
-        Add(omapistenaytto);
-        omapistenaytto.BindTo(omaelama);
+        paari2.BindTo(omaElama);
+        Add(omaPisteNaytto);
+        omaPisteNaytto.BindTo(omaElama);
         Add(paari2);
-        vihuelama.LowerLimit += delegate { VihuTuhoutuminen(); }; ;
-        omaelama.LowerLimit += delegate { KuolemanValiTila(); }; 
+        vihuElama.LowerLimit += delegate { VihuTuhoutuminen(); }; ;
+        omaElama.LowerLimit += delegate { KuolemanValiTila(); };
     }
 
 
@@ -417,27 +417,27 @@ public class Bogeman : PhysicsGame
         Timer.SingleShot(0.5, Normikuva);
         double satunnaisluku1 = RandomGen.NextDouble(100, 5000);
         double satunnaisluku2 = RandomGen.NextDouble(100, 5000);
-        pelipasi.Hit(new Vector(satunnaisluku1, satunnaisluku2));
+        peliPasi.Hit(new Vector(satunnaisluku1, satunnaisluku2));
         kimmo.Hit(new Vector(10000 + nopeuskerroin + valiaikainenkerroin, 5000 + nopeuskerroin / 2 + valiaikainenkerroin / 2));
-        double satunnaisdamage = RandomGen.NextDouble(5, 99) + dmgkerroin;
+        double satunnaisDamage = RandomGen.NextDouble(5, 99) + dmgkerroin;
         Timer.SingleShot(0.5, OmaPalautus);
         Timer.SingleShot(1.5, VihuPalautus);
 
         if (satunnaisluku1 + valiaikainenkerroin * 5 > 2000)
         {
-            satunnaisdamage = RandomGen.NextDouble(100, 150 + dmgkerroin) + dmgkerroin;
+            satunnaisDamage = RandomGen.NextDouble(100, 150 + dmgkerroin) + dmgkerroin;
             criticalhit.Play(0.2, -0.3, 0);
-            int fonttikoko = Convert.ToInt32(satunnaisdamage);
-            Viesti kk = new Viesti($"{satunnaisdamage:0}", new Vector(700, 400), 2, 40 + fonttikoko / 3, 0); Add(kk);
+            int fonttiKoko = Convert.ToInt32(satunnaisDamage);
+            Viesti kk = new Viesti($"{satunnaisDamage:0}", new Vector(700, 400), 2, 40 + fonttiKoko / 3, 0); Add(kk);
         }
         else
         {
-            int fonttikoko = Convert.ToInt32(satunnaisdamage);
+            int fonttiKoko = Convert.ToInt32(satunnaisDamage);
             oof.Play(0.2, 0, 0);
-            Viesti kk = new Viesti($"{satunnaisdamage:0}", new Vector(700, 400), 2, 40 + fonttikoko / 3, 0); Add(kk);
+            Viesti kk = new Viesti($"{satunnaisDamage:0}", new Vector(700, 400), 2, 40 + fonttiKoko / 3, 0); Add(kk);
         }
-        vihuelama.AddOverTime(-satunnaisdamage, 2);
-        if (vihuelama > 0)
+        vihuElama.AddOverTime(-satunnaisDamage, 2);
+        if (vihuElama > 0)
         {
             Timer.SingleShot(3, VihollisenVuoro);
         }
@@ -450,13 +450,13 @@ public class Bogeman : PhysicsGame
     /// </summary>
     private void Raivo()
     {
-        Image[] jartsanraivo = LoadImages("jartsan.png", "jartsanraivo.png");
-        kimmo.Animation = new Animation(jartsanraivo);
+        Image[] jartsanRaivo = LoadImages("jartsan.png", "jartsanraivo.png");
+        kimmo.Animation = new Animation(jartsanRaivo);
         kimmo.Animation.Start(25);
         reeee.Play(0.01, 0.5, 0);
         valiaikainenkerroin += 100;
         kimmo.Size += new Vector(100 + raivokerroin, 100 + raivokerroin);
-        if (vihuelama > 0)
+        if (vihuElama > 0)
         {
             Timer.SingleShot(3, VihollisenVuoro);
         }
@@ -479,7 +479,7 @@ public class Bogeman : PhysicsGame
         Timer.SingleShot(1.5, VihuPalautus);
         Timer.SingleShot(0.5, OmaPalautus);
 
-        if (vihuelama > 0)
+        if (vihuElama > 0)
         {
             Timer.SingleShot(3, VihollisenVuoro);
         }
@@ -500,7 +500,7 @@ public class Bogeman : PhysicsGame
         Timer.SingleShot(0.5, OmaPalautus);
         PoistaPainikkeet();
 
-        if (vihuelama > 0)
+        if (vihuElama > 0)
         {
             Timer.SingleShot(3, VihollisenVuoro);
         }
@@ -526,7 +526,7 @@ public class Bogeman : PhysicsGame
     /// </summary>
     private void VihunIsku()
     {
-        pelipasi.Hit(new Vector(-10000, -4000));
+        peliPasi.Hit(new Vector(-10000, -4000));
     }
 
 
@@ -558,26 +558,26 @@ public class Bogeman : PhysicsGame
     {
         double attackmiss = RandomGen.NextDouble(0, 100);
         double satunnaisluku = RandomGen.NextDouble(100, 5000);
-        double satunnaisdamage = RandomGen.NextDouble(5, 15) + vihuDMG / 2;
+        double satunnaisDamage = RandomGen.NextDouble(5, 15) + vihuDMG / 2;
         if (attackmiss < 98)
         {
             kimmo.Hit(new Vector(-satunnaisluku, -satunnaisluku));
 
             if (satunnaisluku >= 4000)
             {
-                satunnaisdamage = RandomGen.NextDouble(25, 35) + vihuDMG;
+                satunnaisDamage = RandomGen.NextDouble(25, 35) + vihuDMG;
                 Add(new Viesti("Kriittinen osuma!", new Vector(500, 600), 2, 40, 0));
-                int fonttikoko = Convert.ToInt32(satunnaisdamage);
+                int fonttiKoko = Convert.ToInt32(satunnaisDamage);
                 criticalhit.Play(0.2, -0.5, 0);
-                Viesti kk = new Viesti($"{satunnaisdamage:0}", new Vector(250, 300), 2, 70 + fonttikoko, 0); Add(kk);
-                omaelama.AddOverTime(-satunnaisdamage, 2);
+                Viesti kk = new Viesti($"{satunnaisDamage:0}", new Vector(250, 300), 2, 70 + fonttiKoko, 0); Add(kk);
+                omaElama.AddOverTime(-satunnaisDamage, 2);
             }
             else
             {
-                int fonttikoko = Convert.ToInt32(satunnaisdamage);
+                int fonttiKoko = Convert.ToInt32(satunnaisDamage);
                 oof.Play(0.2, -0.5, 0);
-                Viesti kk = new Viesti($"{satunnaisdamage:0}", new Vector(250, 300), 2, 40 + fonttikoko, 0); Add(kk);
-                omaelama.AddOverTime(-satunnaisdamage, 2);
+                Viesti kk = new Viesti($"{satunnaisDamage:0}", new Vector(250, 300), 2, 40 + fonttiKoko, 0); Add(kk);
+                omaElama.AddOverTime(-satunnaisDamage, 2);
             }
 
         }
@@ -594,7 +594,7 @@ public class Bogeman : PhysicsGame
     /// </summary>
     private void VihuPalautus()
     {
-        pelipasi.MoveTo(new Vector(300, 200), 600);
+        peliPasi.MoveTo(new Vector(300, 200), 600);
     }
 
 
@@ -604,27 +604,27 @@ public class Bogeman : PhysicsGame
     private void VihuDamage()
     {
         double attackmiss = RandomGen.NextDouble(0, 100);
-        double satunnaisdamage = RandomGen.NextDouble(10, 15) + dmgkerroin / 2 + valiaikainenkerroin / 3;
+        double satunnaisDamage = RandomGen.NextDouble(10, 15) + dmgkerroin / 2 + valiaikainenkerroin / 3;
         double satunnaisluku = RandomGen.NextDouble(100, 5000) + nopeuskerroin;
 
         if (attackmiss < 99)
         {
-            pelipasi.Hit(new Vector(satunnaisluku, satunnaisluku));
+            peliPasi.Hit(new Vector(satunnaisluku, satunnaisluku));
             if (satunnaisluku >= 3000)
             {
-                satunnaisdamage = RandomGen.NextDouble(25, 30) + dmgkerroin + valiaikainenkerroin;
+                satunnaisDamage = RandomGen.NextDouble(25, 30) + dmgkerroin + valiaikainenkerroin;
                 Add(new Viesti("Kriittinen osuma!", new Vector(500, 600), 2, 40, 0));
-                int fonttikoko = Convert.ToInt32(satunnaisdamage);
+                int fonttikoko = Convert.ToInt32(satunnaisDamage);
                 criticalhit.Play(0.2, 0, 0);
-                Viesti kk = new Viesti($"{satunnaisdamage:0}", new Vector(700, 400), 2, 70 + fonttikoko / 3, 0); Add(kk);
-                vihuelama.AddOverTime(-satunnaisdamage, 2);
+                Viesti kk = new Viesti($"{satunnaisDamage:0}", new Vector(700, 400), 2, 70 + fonttikoko / 3, 0); Add(kk);
+                vihuElama.AddOverTime(-satunnaisDamage, 2);
             }
             else
             {
-                int fonttikoko = Convert.ToInt32(satunnaisdamage);
+                int fonttiKoko = Convert.ToInt32(satunnaisDamage);
                 hitmarka.Play(0.2, 0, 0);
-                Viesti kk = new Viesti($"{satunnaisdamage:0}", new Vector(700, 400), 2, 40 + fonttikoko / 3, 0); Add(kk);
-                vihuelama.AddOverTime(-satunnaisdamage, 2);
+                Viesti kk = new Viesti($"{satunnaisDamage:0}", new Vector(700, 400), 2, 40 + fonttiKoko / 3, 0); Add(kk);
+                vihuElama.AddOverTime(-satunnaisDamage, 2);
             }
         }
         else
@@ -641,7 +641,7 @@ public class Bogeman : PhysicsGame
     private void VihuTuhoutuminen()
     {
         kuolema.Play(0.1, 0.5, 0);
-        pelipasi.Destroy();
+        peliPasi.Destroy();
         Timer.SingleShot(1, SeuraavaTaso);
     }
 
@@ -653,21 +653,21 @@ public class Bogeman : PhysicsGame
     {
         kuolema.Play(0.2, 0, 0);
         kimmo.Destroy();
-        Timer.SingleShot(1, Omatuhoutuminen);
+        Timer.SingleShot(1, OmaTuhoutuminen);
     }
 
 
     /// <summary>
     /// mitä tapahtuu kun itse kuolee
     /// </summary>
-    private void Omatuhoutuminen()
+    private void OmaTuhoutuminen()
     {
         ClearAll();
         Add(new Viesti("Ai saatana sä kuolit", new Vector(300, 200), 40, 40, 0));
-        Painike lopetapeli = new Painike(this, 140, "Lopeta Peli", new Vector(200, 0)); Add(lopetapeli);
+        Painike lopetaPeli = new Painike(this, 140, "Lopeta Peli", new Vector(200, 0)); Add(lopetaPeli);
         Painike alkuvalikko = new Painike(this, 180, "Alkuvalikkoon", new Vector(-200, 0)); Add(alkuvalikko);
         alkuvalikko.Clicked += Begin;
-        lopetapeli.Clicked += Exit;
+        lopetaPeli.Clicked += Exit;
     }
 
 
@@ -682,18 +682,18 @@ public class Bogeman : PhysicsGame
         Add(new Viesti("Kehitä itseäsi ja iskujasi", new Vector(200, 100), 200, 40, 0));
         Add(new Viesti("Voit valita ylä- ja alariviltä yhden vaihtoehdon", new Vector(200, 170), 200, 40, 0));
 
-        Painike lisaavoimaa = new Painike(this, 105, "Voima", new Vector(-200, 100)); Add(lisaavoimaa);
-        Painike lisaanopeutta = new Painike(this, 105, "Nopeus", new Vector(0, 100)); Add(lisaanopeutta);
-        Painike lisaakokoa = new Painike(this, 105, "Koko", new Vector(200, 100)); Add(lisaakokoa);
+        Painike lisaaVoimaa = new Painike(this, 105, "Voima", new Vector(-200, 100)); Add(lisaaVoimaa);
+        Painike lisaaNopeutta = new Painike(this, 105, "Nopeus", new Vector(0, 100)); Add(lisaaNopeutta);
+        Painike lisaaKokoa = new Painike(this, 105, "Koko", new Vector(200, 100)); Add(lisaaKokoa);
 
         Painike kivi = new Painike(this, 105, "Kivi", new Vector(-300, -100)); Add(kivi);
         Painike raivo = new Painike(this, 105, "Raivo", new Vector(-100, -100)); Add(raivo);
         Painike potku = new Painike(this, 105, "Potku", new Vector(100, -100)); Add(potku);
         Painike isku = new Painike(this, 105, "Lyönti", new Vector(300, -100)); Add(isku);
 
-        lisaavoimaa.Clicked += () => { tarkistus = TarkistaYla(lisaavoimaa, lisaanopeutta, lisaakokoa,tarkistus); dmgkerroin += 100; };
-        lisaanopeutta.Clicked += () => { tarkistus = TarkistaYla(lisaavoimaa, lisaanopeutta, lisaakokoa,tarkistus); nopeuskerroin += 100; };
-        lisaakokoa.Clicked += () => { tarkistus = TarkistaYla(lisaavoimaa, lisaanopeutta, lisaakokoa, tarkistus); kokokerroin += 100; };
+        lisaaVoimaa.Clicked += () => { tarkistus = TarkistaYla(lisaaVoimaa, lisaaNopeutta, lisaaKokoa, tarkistus); dmgkerroin += 100; };
+        lisaaNopeutta.Clicked += () => { tarkistus = TarkistaYla(lisaaVoimaa, lisaaNopeutta, lisaaKokoa, tarkistus); nopeuskerroin += 100; };
+        lisaaKokoa.Clicked += () => { tarkistus = TarkistaYla(lisaaVoimaa, lisaaNopeutta, lisaaKokoa, tarkistus); kokokerroin += 100; };
 
         kivi.Clicked += () => { tarkistus = TarkistaAla(kivi, raivo, potku, isku, tarkistus); kivikerroin += 100; };
         raivo.Clicked += () => { tarkistus = TarkistaAla(kivi, raivo, potku, isku, tarkistus); raivokerroin += 100; };
@@ -702,21 +702,21 @@ public class Bogeman : PhysicsGame
     }
 
 
-/// <summary>
-/// kadottaa painikkeet
-/// </summary>
-/// <param name="a"></param>
-/// <param name="b"></param>
-/// <param name="c"></param>
-/// <param name="tarkistus"></param>
-/// <returns>Onko ylärivi olemassa</returns>
-    private int TarkistaYla(Painike a, Painike b, Painike c,int tarkistus)
+    /// <summary>
+    /// kadottaa painikkeet
+    /// </summary>
+    /// <param name="a">Poistettava painike</param>
+    /// <param name="b">Poistettava painike</param>
+    /// <param name="c">Poistettava painike</param>
+    /// <param name="tarkistus">numero, joka on 0 jos TarkistaAla aliohjelmassa ei ole käyty, ja jos on niin numero on 1</param>
+    /// <returns>Onko ylärivi olemassa</returns>
+    private int TarkistaYla(Painike a, Painike b, Painike c, int tarkistus)
     {
         int tarkistus1 = tarkistus;
         tarkistus1++;
         if (tarkistus1 > 1)
         {
-            Uusivastustaja();
+            UusiVastustaja();
         }
         a.Destroy();
         b.Destroy();
@@ -726,22 +726,22 @@ public class Bogeman : PhysicsGame
     }
 
 
-/// <summary>
-/// kadottaa painikket
-/// </summary>
-/// <param name="a"></param>
-/// <param name="b"></param>
-/// <param name="c"></param>
-/// <param name="d"></param>
-/// <param name="tarkistus"></param>
-/// <returns>onko alarivi olemassa</returns>
-    private int TarkistaAla(Painike a, Painike b, Painike c, Painike d,int tarkistus)
+    /// <summary>
+    /// kadottaa painikket
+    /// </summary>
+    /// <param name="a">Poistettava painike</param>
+    /// <param name="b">Poistettava painike</param>
+    /// <param name="c">Poistettava painike</param>
+    /// <param name="d">Poistettava painike</param>
+    /// <param name="tarkistus">numero, joka on 0 jos TarkistaYla aliohjelmassa ei ole käyty, ja jos on niin numero on 1</param>
+    /// <returns>onko alarivi olemassa</returns>
+    private int TarkistaAla(Painike a, Painike b, Painike c, Painike d, int tarkistus)
     {
         int tarkistus2 = tarkistus;
         tarkistus2++;
         if (tarkistus2 > 1)
         {
-            Uusivastustaja();
+            UusiVastustaja();
         }
 
         a.Destroy();
@@ -784,18 +784,18 @@ public class Bogeman : PhysicsGame
     /// <summary>
     /// Luo seuraavan vastustajan
     /// </summary>
-    private void Uusivastustaja()
+    private void UusiVastustaja()
     {
         ClearAll();
         LuoKentta();
         Level.Background.CreateGradient(RandomGen.NextColor(), RandomGen.NextColor());
         kimmo = new Pelaaja(this, 200 + kokokerroin, 10, "jartsan.png"); Add(kimmo);
-        pelipasi = new Viholainen(this, 100 + vihuHP / 2, 10, viholliset[vastustajanro]); Add(pelipasi);
+        peliPasi = new Viholainen(this, 100 + vihuHP / 2, 10, viholliset[vastustajanro]); Add(peliPasi);
         OmaPalautus();
         VihuPalautus();
     }
-      
-    
+
+
     /// <summary>
     /// tapahtuma viimeisen tason jälkeen
     /// </summary>
@@ -803,11 +803,11 @@ public class Bogeman : PhysicsGame
     {
         ClearAll();
         Level.Background.CreateGradient(Color.Black, Color.DarkAzure);
-        Add(new Viesti("Voitit pelin! Mahtavaa!", new Vector(250, 100), 100, 60,1));
+        Add(new Viesti("Voitit pelin! Mahtavaa!", new Vector(250, 100), 100, 60, 1));
         Painike endgame = new Painike(this, 200, "Lopeta peli", new Vector(0, -250)); Add(endgame);
         endgame.Clicked += Exit;
         Add(kimmo);
-        kimmo.Position = new Vector(0,0);
+        kimmo.Position = new Vector(0, 0);
         Camera.Follow(kimmo);
         Camera.Zoom(0.5);
         Image[] voittotanssi = LoadImages("jartsanani.png", "jartsan.png");
@@ -817,14 +817,14 @@ public class Bogeman : PhysicsGame
 
         for (int i = 1; i < 100; i++)
         {
-            double koordinaattiY = RandomGen.NextDouble(Level.Bottom+100, Level.Top-100);
-            double koordinaattiX = RandomGen.NextDouble(Level.Left+100, Level.Right-100);
+            double koordinaattiY = RandomGen.NextDouble(Level.Bottom + 100, Level.Top - 100);
+            double koordinaattiX = RandomGen.NextDouble(Level.Left + 100, Level.Right - 100);
             double korkeus = RandomGen.NextDouble(30, 75);
             double leveys = RandomGen.NextDouble(30, 75);
             PhysicsObject voittotahti = new PhysicsObject(leveys, korkeus, Shape.Star, koordinaattiY, koordinaattiX);
             voittotahti.Color = Color.Yellow;
             Timer.SingleShot(i, delegate { Add(voittotahti); });
-            voittotahti.LifetimeLeft = TimeSpan.FromSeconds(i+5);
+            voittotahti.LifetimeLeft = TimeSpan.FromSeconds(i + 5);
         }
     }
 
@@ -866,7 +866,7 @@ public class Viholainen : Character
     /// <param name="kuva"></param>
     public Viholainen(PhysicsGame peli, double koko, double massa, string kuva) : base(peli, koko, massa, kuva)
     {
-        
+
         Image = Game.LoadImage(kuva);
         Position = new Vector(1000, 300);
     }
