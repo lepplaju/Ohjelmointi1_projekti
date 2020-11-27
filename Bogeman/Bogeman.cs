@@ -22,7 +22,7 @@ public class Bogeman : PhysicsGame
     private Vector omaPaikka = new Vector(-300, -100);
     private Vector vihuPaikka = new Vector(300, 200);
     private double valiaikainenKerroin = 0;
-    private double Vahinkokerroin = 30;
+    private double vahinkokerroin = 30;
     private int nopeuskerroin = 1;
     private double kokokerroin = 1;
     private double raivokerroin = 1;
@@ -419,13 +419,13 @@ public class Bogeman : PhysicsGame
         double satunnaisluku2 = RandomGen.NextDouble(100, 5000);
         peliPasi.Hit(new Vector(satunnaisluku1, satunnaisluku2));
         kimmo.Hit(new Vector(10000 + nopeuskerroin + valiaikainenKerroin, 5000 + nopeuskerroin / 2 + valiaikainenKerroin / 2));
-        double satunnaisDamage = RandomGen.NextDouble(5, 99) + Vahinkokerroin;
+        double satunnaisDamage = RandomGen.NextDouble(5, 99) + vahinkokerroin;
         Timer.SingleShot(0.5, OmaPalautus);
         Timer.SingleShot(1.5, VihuPalautus);
 
         if (satunnaisluku1 + valiaikainenKerroin * 5 > 2000)
         {
-            satunnaisDamage = RandomGen.NextDouble(100, 150 + Vahinkokerroin) + Vahinkokerroin;
+            satunnaisDamage = RandomGen.NextDouble(100, 150 + vahinkokerroin) + vahinkokerroin;
             criticalhit.Play(0.2, -0.3, 0);
             int fonttiKoko = Convert.ToInt32(satunnaisDamage);
             Viesti kk = new Viesti($"{satunnaisDamage:0}", new Vector(700, 400), 2, 40 + fonttiKoko / 3, 0); Add(kk);
@@ -604,7 +604,7 @@ public class Bogeman : PhysicsGame
     private void VihuDamage()
     {
         double attackmiss = RandomGen.NextDouble(0, 100);
-        double satunnaisDamage = RandomGen.NextDouble(10, 15) + Vahinkokerroin / 2 + valiaikainenKerroin / 3;
+        double satunnaisDamage = RandomGen.NextDouble(10, 15) + vahinkokerroin / 2 + valiaikainenKerroin / 3;
         double satunnaisluku = RandomGen.NextDouble(100, 5000) + nopeuskerroin;
 
         if (attackmiss < 99)
@@ -612,7 +612,7 @@ public class Bogeman : PhysicsGame
             peliPasi.Hit(new Vector(satunnaisluku, satunnaisluku));
             if (satunnaisluku >= 3000)
             {
-                satunnaisDamage = RandomGen.NextDouble(25, 30) + Vahinkokerroin + valiaikainenKerroin;
+                satunnaisDamage = RandomGen.NextDouble(25, 30) + vahinkokerroin + valiaikainenKerroin;
                 Add(new Viesti("Kriittinen osuma!", new Vector(500, 600), 2, 40, 0));
                 int fonttikoko = Convert.ToInt32(satunnaisDamage);
                 criticalhit.Play(0.2, 0, 0);
@@ -691,14 +691,14 @@ public class Bogeman : PhysicsGame
         Painike potku = new Painike(this, 105, "Potku", new Vector(100, -100)); Add(potku);
         Painike isku = new Painike(this, 105, "Lyönti", new Vector(300, -100)); Add(isku);
 
-        lisaaVoimaa.Clicked += () => { tarkistus = TarkistaYla(lisaaVoimaa, lisaaNopeutta, lisaaKokoa, tarkistus); Vahinkokerroin += 100; };
+        lisaaVoimaa.Clicked += () => { tarkistus = TarkistaYla(lisaaVoimaa, lisaaNopeutta, lisaaKokoa, tarkistus); vahinkokerroin += 100; };
         lisaaNopeutta.Clicked += () => { tarkistus = TarkistaYla(lisaaVoimaa, lisaaNopeutta, lisaaKokoa, tarkistus); nopeuskerroin += 100; };
         lisaaKokoa.Clicked += () => { tarkistus = TarkistaYla(lisaaVoimaa, lisaaNopeutta, lisaaKokoa, tarkistus); kokokerroin += 100; };
 
         kivi.Clicked += () => { tarkistus = TarkistaAla(kivi, raivo, potku, isku, tarkistus); kivikerroin += 100; };
         raivo.Clicked += () => { tarkistus = TarkistaAla(kivi, raivo, potku, isku, tarkistus); raivokerroin += 100; };
-        potku.Clicked += () => { tarkistus = TarkistaAla(kivi, raivo, potku, isku, tarkistus); Vahinkokerroin += 1000; };
-        isku.Clicked += () => { tarkistus = TarkistaAla(kivi, raivo, potku, isku, tarkistus); Vahinkokerroin += 100; };
+        potku.Clicked += () => { tarkistus = TarkistaAla(kivi, raivo, potku, isku, tarkistus); vahinkokerroin += 1000; };
+        isku.Clicked += () => { tarkistus = TarkistaAla(kivi, raivo, potku, isku, tarkistus); vahinkokerroin += 100; };
     }
 
 
