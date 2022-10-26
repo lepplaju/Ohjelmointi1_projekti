@@ -5,10 +5,11 @@ using Jypeli.Widgets;
 /// <summary>
 /// @Author: Lauri Leppänen
 /// @Version: 1.0 - 26.11.2020
-/// Pelin ideana tuhota kaikki viholliset
+/// @Kuvaus: Taistele vihollisia vastaan ja kehitä hahmoasi matkan varrella - "Vuoropohjainen strategiapeli"
 /// </summary>
 public class Bogeman : PhysicsGame
 {
+    // Kaikkien ominaisuuksien alustaminen. Mm. Vihollisten ikonit, kaikki painikkeet, elämäpisteet, eri iskujen arvot, ääniefektit
     private int pause = 0;
     private int poissa1 = 0;
     private int poissa2 = 0;
@@ -51,7 +52,7 @@ public class Bogeman : PhysicsGame
     /// </summary>
     public override void Begin()
     {
-        /// MediaPlayer.Play("Taustamusa");
+        MediaPlayer.Play("Taustamusa");
         Aloita();
         Musanappaimet();
     }
@@ -63,13 +64,9 @@ public class Bogeman : PhysicsGame
     private void Aloita()
     {
         ClearAll();
-
-        Musanappaimet();
-
+        Musanappaimet(); // Voidaan lopettaa musiikki painamalla o-kirjainta ja jatkaa musiikin soittamista painamalla O-kirjainta
         Mouse.IsCursorVisible = true;
-
         Add(new Viesti("Tervetuloa pelaamaan Bogemäniä!", new Vector(325, 50), 500, 30, 1));
-
         Level.Background.CreateGradient(Color.Black, Color.DarkAzure);
 
         Painike aloita = new Painike(this, 300, "Pelaa Peliä", new Vector(0, 200));
@@ -88,7 +85,7 @@ public class Bogeman : PhysicsGame
 
 
     /// <summary>
-    /// Ohjeet sivu
+    /// Ohjeet sivu, Määritellään mitä tapahtuu kun painetaan "ohjeet" - painiketta
     /// </summary>
     private void Ohjeet()
     {
@@ -111,7 +108,9 @@ public class Bogeman : PhysicsGame
 
 
     /// <summary>
-    /// Hahmonvalinta sivu
+    /// Hahmonvalinta sivu, näkyy, kun painetaan "pelaa peliä" - painiketta
+    /// Ehdottaa kolmea hamhoa, joista vain yhden voi valita ja muut katoavat näkyvistä, jos niitä yrittää valita
+    /// Kaikilla hahmoilla on myös animaatio, jos niiden päälle laittaa hiiren
     /// </summary>
     private void HahmoValinta()
     {
@@ -188,7 +187,7 @@ public class Bogeman : PhysicsGame
 
 
     /// <summary>
-    /// mitä tapahtuu kun näppäintä pena painetaan
+    /// Jos yritetään valita valehahmo
     /// </summary>
     private void PenaClicked()
     {
@@ -200,7 +199,7 @@ public class Bogeman : PhysicsGame
 
 
     /// <summary>
-    /// mitä tapahtuu kun näppäintä pasi painetaan
+    /// Jos yritetään valita valehahmo
     /// </summary>
     private void PasiClicked()
     {
@@ -233,22 +232,17 @@ public class Bogeman : PhysicsGame
 
 
     /// <summary>
-    /// mitä tapahtuu kun painiketta kyllä painetaan
+    /// Varsinaisen pelin aloittaminen: Tuhotaan päävalikko
     /// </summary>
     private void KyllaClicked()
     {
-        //System.Diagnostics.Process.Start("peli.cmd","jartsa");
-        //using (var game = new OfficalHarkkatyo())
-        //  game.Run();
-
-        //Exit();
         ClearAll();
-        Begining();
+        Beginning();
     }
 
 
     /// <summary>
-    /// musiikki paussille tai eteenpäin
+    /// Musiikin säätäminen
     /// </summary>
     private void Paussi()
     {
@@ -266,7 +260,7 @@ public class Bogeman : PhysicsGame
 
 
     /// <summary>
-    /// musiikki seuraava kappale
+    /// Musiikin säätäminen
     /// </summary>
     private void NextSong()
     {
@@ -295,11 +289,11 @@ public class Bogeman : PhysicsGame
 
 
     /// <summary>
-    /// Peli alkaa
+    /// Valikon jälkeinen tila: Varsinainen peli alkaa
     /// </summary>
-    public void Begining()
+    public void Beginning()
     {
-        ///MediaPlayer.Play("trap");
+        MediaPlayer.Play("trap");
         Level.Background.CreateGradient(Color.DarkTurquoise, Color.DarkAzure);
         LuoKentta();
 
@@ -754,7 +748,7 @@ public class Bogeman : PhysicsGame
 
 
     /// <summary>
-    /// etenee seuraavalle tasolle
+    /// Etenee seuraavalle tasolle tai jos kaikki vastustajat on jo voitettu, menee voitto sivulle.
     /// </summary>
     private void SeuraavaTaso()
     {
@@ -782,7 +776,7 @@ public class Bogeman : PhysicsGame
 
 
     /// <summary>
-    /// Luo seuraavan vastustajan
+    /// Luo aina seuraavan tason, kun edellinen vastustaja on voitettu
     /// </summary>
     private void UusiVastustaja()
     {
@@ -797,7 +791,7 @@ public class Bogeman : PhysicsGame
 
 
     /// <summary>
-    /// tapahtuma viimeisen tason jälkeen
+    /// Viimeisen tason voittamisen jälkeen näytetään onnittelu-sivu 
     /// </summary>
     private void VoititPelin()
     {
@@ -832,7 +826,7 @@ public class Bogeman : PhysicsGame
 
 
 /// <summary>
-/// Pelaajan/viholaisen yläluokka
+/// Kaikki luokat ovat tästä eteenpäin:
 /// </summary>
 public class Character : PhysicsObject
 {
